@@ -23,6 +23,5 @@ void setup() {
 
 void loop() { 
   Serial.printf("\rTemperatur: %.2f°C, Feuchtigkeit: %.2f%%", climate.readTemperature(), climate.readHumidity());
-  led.testCycle(500);
-  delay(1000);
+  delay(500);
 }

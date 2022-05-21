@@ -8,6 +8,10 @@ class RGB {
 
     public:
 
+        /**
+         * @brief Constants of different colors. To use them, call setColor(<name of constant>).
+         * 
+         */
         const int RED = 0xFF0000;
         const int GREEN = 0x00FF00;
         const int BLUE = 0x0000FF;
