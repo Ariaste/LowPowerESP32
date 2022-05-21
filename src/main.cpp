@@ -1,15 +1,22 @@
 #include <Arduino.h>
+#include "BluetoothSerial.h"
 
-const int led = 26;
-const int t = 500;
+BluetoothSerial SerialBT;
 
 void setup() {
-  pinMode(led, OUTPUT);
+  Serial.begin(115200);
+  SerialBT.begin("Maunzikatze"); //Name des ESP32
+  Serial.println("Der ESP32 ist bereit. Verbinde dich nun über Bluetooth.");
+  BTScanResults* devices = SerialBT.discover();
+
 }
 
 void loop() {
-  digitalWrite(led, HIGH);
-  delay(t);
-  digitalWrite(led, LOW);
-  delay(t);
+  if (Serial.available()) {
+    SerialBT.write(Serial.read());
+  }
+  if (SerialBT.available()) {
+    Serial.write(SerialBT.read());
+  }
+  delay(25);
 }
