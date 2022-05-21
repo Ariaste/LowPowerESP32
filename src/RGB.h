@@ -2,11 +2,18 @@
 
 /**
  * @brief A class for controlling rgb leds.
- * 
+ * @author Patrick Fock
  */
 class RGB {
 
     public:
+
+        const int RED = 0xFF0000;
+        const int GREEN = 0x00FF00;
+        const int BLUE = 0x0000FF;
+        const int YELLOW = 0xFFFF00;
+        const int WHITE = 0xFFFFFF;
+        const int PINK = 0xF207BF;
 
         /**
          * @brief Construct a new RGB object.
@@ -28,7 +35,7 @@ class RGB {
         }
 
         /**
-         * @brief Set the led color
+         * @brief Set the led color.
          * 
          * @param red red value
          * @param green green value
@@ -42,6 +49,18 @@ class RGB {
         }
 
         /**
+         * @brief Set the led color.
+         * 
+         * @param rgb integer containing red, green and blue value.
+         */
+        void setColor(int rgb) {
+            int red = (rgb >> 16) % 256;
+            int green = (rgb >> 8) % 256;
+            int blue = rgb % 256;
+            setColor(red, green, blue);
+        }
+
+        /**
          * @brief Turns led off.
          * 
          */
@@ -52,21 +71,16 @@ class RGB {
         }
 
         /**
-         * @brief Creates a cycle of red, green and blue.
+         * @brief Creates a cycle of colours.
          * 
          */
-        void testCycle() {
-            int t = 1000;
+        void testCycle(int t) {
+            int colours[] = {RED, GREEN, BLUE, YELLOW, PINK, WHITE};
             while(true) {
-                clear();
-                setColor(255, 0, 0);
-                delay(t);
-                clear();
-                setColor(0, 255, 0);
-                delay(t);
-                clear();
-                setColor(0, 0, 255);
-                delay(t);
+                for(int colour : colours) {
+                    setColor(colour);
+                    delay(t);
+                }
             }
         }
 };

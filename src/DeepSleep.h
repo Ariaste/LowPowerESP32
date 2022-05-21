@@ -1,33 +1,43 @@
 #include <Arduino.h>
 
+    const int SECONDS = 1000000;
+    const int MINUTES = 60000000;
+    const int HOURS = 3600000000;
+
     /**
-     * @brief Enables the deep sleep mode of the ESP32 and wakes it up on based on a timer.
+     * @brief Enables deepsleep of the ESP32 and wakes it up after the given time.
      * 
-     * @param seconds time to sleep in seconds
+     * @param time amount of time units to sleep
+     * @param mode unit of time, available: SECONDS, MINUTES, HOURS
      */
-    void deepSleep(int seconds) {
-        esp_sleep_enable_timer_wakeup(seconds * 1000000);
+    void deepSleep(int time, int unit) {
+        esp_sleep_enable_timer_wakeup(time * unit);
         esp_deep_sleep_start();
     }
 
     /**
-     * @brief Enables the deep sleep mode of the ESP32 and wakes it up on based on a timer.
+     * @brief Enables deepsleep of the ESP32 and wakes it up after the given time.
      * 
-     * @param seconds time to sleep in minutes
+     * @param seconds wake up after given seconds
      */
-    void deepSleep(int minutes) {
-        esp_sleep_enable_timer_wakeup(minutes * 60000000);
-        esp_deep_sleep_start();
+    void deepSleepForSeconds(int seconds) {
+        deepSleep(seconds, SECONDS);
     }
 
     /**
-     * @brief Enables the deep sleep mode of the ESP32 and wakes it up on based on a timer.
+     * @brief Enables deepsleep of the ESP32 and wakes it up after the given time.
      * 
-     * @param seconds time to sleep in hours
+     * @param seconds wake up after given minutes
      */
-    void deepSleep(int hours) {
-        esp_sleep_enable_timer_wakeup(hours * 3600000000);
-        esp_deep_sleep_start();
+    void deepSleepForMinutes(int minutes) {
+        deepSleep(minutes, MINUTES);
     }
 
-
+    /**
+     * @brief Enables deepsleep of the ESP32 and wakes it up after the given time.
+     * 
+     * @param seconds wake up after given hours
+     */
+    void deepSleepForHours(int hours) {
+        deepSleep(hours, HOURS);
+    }
