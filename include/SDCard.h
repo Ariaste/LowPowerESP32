@@ -1,4 +1,3 @@
-#include <SDESP32.h>
 #include <Arduino.h>
 #include <FS.h>
 #include <SD.h>
