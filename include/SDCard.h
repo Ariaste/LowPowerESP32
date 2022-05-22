@@ -18,19 +18,20 @@ class SDCard {
         /**
          * @brief Initialises the SD card.
          * 
+         * @return success/failure of initialisation
          */
-        void begin() {
+        boolean begin() {
 
             Serial.begin(115200);
             if(!SD.begin(5)){
                 Serial.println("Card Mount Failed");
-                return;
+                return false;
             }
             uint8_t cardType = SD.cardType();
 
             if(cardType == CARD_NONE){
                 Serial.println("No SD card attached");
-                return;
+                return false;
             }
 
             Serial.print("SD Card Type: ");
@@ -46,6 +47,7 @@ class SDCard {
 
             uint64_t cardSize = SD.cardSize() / (1024 * 1024);
             Serial.printf("SD Card Size: %llu MB\n", cardSize);
+            return true;
     } 
 
         /**
@@ -54,7 +56,7 @@ class SDCard {
          * @param dirname directory to list
          * @param levels number of subdectory levels
          */
-        void listDir(const char * dirname, uint8_t levels){
+        void listDir(const char * dirname, uint8_t levels) {
 
             Serial.printf("Listing directory: %s\n", dirname);
 
@@ -94,13 +96,16 @@ class SDCard {
          * @brief Create a new directory.
          * 
          * @param path path of the new directory
+         * @return success/failure of creation
          */
-        void createDir(const char * path){
+        boolean createDir(const char * path) {
             Serial.printf("Creating Dir: %s\n", path);
             if(SD.mkdir(path)){
                 Serial.println("Dir created");
+                return true;
             } else {
                 Serial.println("mkdir failed");
+                return false;
         }
 }
 
@@ -108,13 +113,16 @@ class SDCard {
          * @brief Removes a directory.
          * 
          * @param path path of directory to be removed.
+         * @return success/failure of removing
          */
-        void removeDir(const char * path){
+        boolean removeDir(const char * path) {
             Serial.printf("Removing Dir: %s\n", path);
             if(SD.rmdir(path)){
                 Serial.println("Dir removed");
+                return true;
             } else {
                 Serial.println("rmdir failed");
+                return false;
             }
         }
 
@@ -123,7 +131,7 @@ class SDCard {
          * 
          * @param path file path
          */
-        void printFile(const char * path){
+        void printFile(const char * path) {
             Serial.printf("Reading file: %s\n", path);
 
             File file = SD.open(path);
@@ -145,7 +153,7 @@ class SDCard {
          * @param path file to read
          * @return String file content
          */
-        String readFileToString(const char * path){
+        String readFileToString(const char * path) {
             Serial.printf("Reading file: %s\n", path);
 
             File file = SD.open(path);
@@ -170,7 +178,7 @@ class SDCard {
          * @param path file to read
          * @return File file object
          */
-        File readFile(const char * path){
+        File readFile(const char * path) {
             Serial.printf("Reading file: %s\n", path);
 
             File file = SD.open(path);
@@ -180,6 +188,95 @@ class SDCard {
             }
 
             return file;
+        }
+
+        /**
+         * @brief Writes to a file
+         * 
+         * @param path file path
+         * @param content file content
+         * @return success/failure of writing
+         */
+        boolean writeFile(const char * path, const char * content) {
+            boolean success;
+            Serial.printf("Writing file: %s\n", path);
+
+            File file = SD.open(path, FILE_WRITE);
+            if(!file){
+                Serial.println("Failed to open file for writing");
+                return false;
+            }
+            if(file.print(content)){
+                Serial.println("File written");
+                success = true;
+            } else {
+                Serial.println("Write failed");
+                success = false;
+            }
+            file.close();
+            return success;
+        }
+
+        /**
+         * @brief Appends data to a file.
+         * 
+         * @param path file path
+         * @param content content to append
+         * @return success/failure of appending
+         */
+        boolean appendFile(const char * path, const char * content){
+            boolean res;
+            Serial.printf("Appending to file: %s\n", path);
+
+            File file = SD.open(path, FILE_APPEND);
+            if(!file){
+                Serial.println("Failed to open file for appending");
+                return false;
+            }
+            if(file.print(content)){
+                Serial.println("Message appended");
+                res = true;
+            } else {
+                Serial.println("Append failed");
+                res = false;
+            }
+            file.close();
+            return res;
+        }
+
+        /**
+         * @brief Renames a file.
+         * 
+         * @param oldPath old name including path
+         * @param newPath new name including path
+         * @return success/failure of renaming
+         */
+        boolean renameFile(const char * oldPath, const char * newPath){
+            Serial.printf("Renaming file %s to %s\n", oldPath, newPath);
+            if (SD.rename(oldPath, newPath)) {
+                Serial.println("File renamed");
+                return true;
+            } else {
+                Serial.println("Rename failed");
+                return false;
+            }
+        }
+
+        /**
+         * @brief Deletes a file.
+         * 
+         * @param path file to delete
+         * @return success/failure of deletion
+         */
+        boolean deleteFile(const char * path){
+            Serial.printf("Deleting file: %s\n", path);
+            if(SD.remove(path)){
+                Serial.println("File deleted");
+                return true;
+            } else {
+                Serial.println("Delete failed");
+                return false;
+            }
         }
 
 };
