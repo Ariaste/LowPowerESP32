@@ -153,15 +153,14 @@ class SDCard {
          * @return String file content
          */
         String readFileToString(const char * path) {
+            String fileAsString = "";
             Serial.printf("Reading file: %s\n", path);
 
             File file = SD.open(path);
             if(!file){
                 Serial.println("Failed to open file for reading");
-                return;
+                return fileAsString;
             }
-
-            String fileAsString = "";
 
             Serial.print("Read from file: ");
             while(file.available()){
@@ -183,9 +182,7 @@ class SDCard {
             File file = SD.open(path);
             if(!file){
                 Serial.println("Failed to open file for reading");
-                return;
             }
-
             return file;
         }
 

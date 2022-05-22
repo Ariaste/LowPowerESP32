@@ -22,7 +22,7 @@ void setup() {
   Serial.println("\nHTU21DF is ready.\n");
 
   sd.begin();
-  sd.listDir("/", 0);
+  sd.listDir();
 }
 
 void loop() { 
