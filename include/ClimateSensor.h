@@ -1,5 +1,6 @@
 #include <Adafruit_HTU21DF.h>
 #include <Adafruit_BMP085.h>
+#include <cmath>
 
 /** This class unites the HTD21DF and the BMP085 sensor. */
 class ClimateSensor {
@@ -7,9 +8,9 @@ class ClimateSensor {
     private:
         Adafruit_HTU21DF humiditySensor;
         Adafruit_BMP085 barometricSensor;
+        float referencePressure = 101325;
 
     public:
-        ClimateSensor();
 
         /**
          * Initialising both sensors.
@@ -56,7 +57,7 @@ class ClimateSensor {
          * @return float pressure
          */
         float readPressure() {
-            return barometricSensor.readPressure();
+            return barometricSensor.readPressure() / 100.0;
         }
 
         /**
@@ -64,15 +65,19 @@ class ClimateSensor {
          * @return float altitude at sealevel
          */
         float readSeaLevelPressure(float altitude_meters = 0) {
-            return barometricSensor.readSealevelPressure(altitude_meters);
+            return barometricSensor.readSealevelPressure(altitude_meters) / 100.0;
+        }
+
+        void setReferenceHeight(float height) {
+            referencePressure = readSeaLevelPressure(height) * 100;
         }
 
         /**
          * Reads the altitude according to an given sealevel pressure. The default is 1013.25 mP.
          * @return float altitude
          */
-        float readAltitude(float sealevelPressure = 101325) {
-            return barometricSensor.readAltitude(sealevelPressure);
+        float readAltitude() {
+            return barometricSensor.readAltitude(referencePressure);
         }
 
         /**
