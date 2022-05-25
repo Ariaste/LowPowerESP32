@@ -1,6 +1,7 @@
 #include <Adafruit_HTU21DF.h>
 #include <Adafruit_BMP085.h>
 #include <cmath>
+#include <ClimateDataLogger.h>
 
 /** This class unites the HTD21DF and the BMP085 sensor. */
 class ClimateSensor {
@@ -9,6 +10,7 @@ class ClimateSensor {
         Adafruit_HTU21DF humiditySensor;
         Adafruit_BMP085 barometricSensor;
         float referencePressure = 101325;
+        ClimateDataLogger logger;
 
     public:
 
@@ -17,6 +19,7 @@ class ClimateSensor {
          * @return bool if initialisation successful.
          */ 
         boolean begin() {
+            logger.begin();
             return humiditySensor.begin() && barometricSensor.begin();
         }
 
@@ -85,6 +88,16 @@ class ClimateSensor {
          */
          void resetHTU21DF() {
              humiditySensor.reset();
-         }
+        }
+
+        void log() {
+            logger.log(
+                readTemperature(),
+                readHumidity(),
+                readPressure(),
+                readSeaLevelPressure(),
+                readAltitude()
+            );
+        }
         
 };
