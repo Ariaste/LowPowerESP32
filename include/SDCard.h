@@ -4,14 +4,12 @@
 #include <SPI.h>
 
 /**
- * @brief A class for handeling SPI SD card modules
+ * @brief A class for handeling SPI SD card modules.
  * 
  * @author Patrick Fock 
  */
 class SDCard {
 
-    private:
-        
     public:
 
         /**
@@ -33,6 +31,13 @@ class SDCard {
                 return false;
             }
 
+            String types[4] = {"MMC", "SDSC", "SDHC", "UNKNOWN"};
+            Serial.printf(
+                "SD Card Type: %s\nSD Card Size: %llu MB\n", 
+                types[cardType > 0 && cardType <= 3 ? cardType - 1 : 3],
+                SD.cardSize() / (1024 * 1024)
+            );
+            /*
             Serial.print("SD Card Type: ");
             if(cardType == CARD_MMC){
                 Serial.println("MMC");
@@ -43,9 +48,12 @@ class SDCard {
             } else {
                 Serial.println("UNKNOWN");
             }
+            */
 
-            uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+            /*uint64_t cardSize = SD.cardSize() / (1024 * 1024);
             Serial.printf("SD Card Size: %llu MB\n", cardSize);
+            */
+           
             return true;
     } 
 
@@ -98,12 +106,10 @@ class SDCard {
          * @return success/failure of creation
          */
         boolean createDir(const char * path) {
-            Serial.printf("Creating Dir: %s\n", path);
             if(SD.mkdir(path)){
-                Serial.println("Dir created");
                 return true;
             } else {
-                Serial.println("mkdir failed");
+                Serial.printf("Creation of directory %s failed", path);
                 return false;
         }
 }
@@ -114,15 +120,8 @@ class SDCard {
          * @param path path of directory to be removed.
          * @return success/failure of removing
          */
-        boolean removeDir(const char * path) {
-            Serial.printf("Removing Dir: %s\n", path);
-            if(SD.rmdir(path)){
-                Serial.println("Dir removed");
-                return true;
-            } else {
-                Serial.println("rmdir failed");
-                return false;
-            }
+        boolean removeDirectory(const char * path) {
+            return SD.rmdir(path);
         }
 
         /**
@@ -131,15 +130,13 @@ class SDCard {
          * @param path file path
          */
         void printFile(const char * path) {
-            Serial.printf("Reading file: %s\n", path);
 
             File file = SD.open(path);
             if(!file){
-                Serial.println("Failed to open file for reading");
+                Serial.printf("Failed to open %s for reading", path);
                 return;
             }
 
-            Serial.print("Read from file: ");
             while(file.available()){
                 Serial.write(file.read());
             }
@@ -154,15 +151,13 @@ class SDCard {
          */
         String readFileToString(const char * path) {
             String fileAsString = "";
-            Serial.printf("Reading file: %s\n", path);
 
             File file = SD.open(path);
             if(!file){
-                Serial.println("Failed to open file for reading");
+                Serial.printf("Failed to open %s for reading", path);
                 return fileAsString;
             }
 
-            Serial.print("Read from file: ");
             while(file.available()){
                 fileAsString += file.read() + "\n";
             }
@@ -177,11 +172,9 @@ class SDCard {
          * @return File file object
          */
         File readFile(const char * path) {
-            Serial.printf("Reading file: %s\n", path);
-
             File file = SD.open(path);
             if(!file){
-                Serial.println("Failed to open file for reading");
+                Serial.printf("Failed to open %s for reading", path);
             }
             return file;
         }
@@ -193,7 +186,7 @@ class SDCard {
          * @return boolean true if file exists else false
          */
         boolean exists(const char* path) {
-            return SD.open(path);
+            return SD.exists(path);
         }
 
         /**
@@ -205,18 +198,13 @@ class SDCard {
          */
         boolean writeFile(const char * path, const char * content) {
             boolean success;
-            Serial.printf("Writing file: %s\n", path);
-
             File file = SD.open(path, FILE_WRITE);
             if(!file){
-                Serial.println("Failed to open file for writing");
                 return false;
             }
             if(file.print(content)){
-                Serial.println("File written");
                 success = true;
             } else {
-                Serial.println("Write failed");
                 success = false;
             }
             file.close();
@@ -250,14 +238,7 @@ class SDCard {
          * @return success/failure of renaming
          */
         boolean renameFile(const char * oldPath, const char * newPath){
-            Serial.printf("Renaming file %s to %s\n", oldPath, newPath);
-            if (SD.rename(oldPath, newPath)) {
-                Serial.println("File renamed");
-                return true;
-            } else {
-                Serial.println("Rename failed");
-                return false;
-            }
+            return SD.rename(oldPath, newPath);
         }
 
         /**
@@ -267,14 +248,7 @@ class SDCard {
          * @return success/failure of deletion
          */
         boolean deleteFile(const char * path){
-            Serial.printf("Deleting file: %s\n", path);
-            if(SD.remove(path)){
-                Serial.println("File deleted");
-                return true;
-            } else {
-                Serial.println("Delete failed");
-                return false;
-            }
+            return SD.remove(path);
         }
 
 };
