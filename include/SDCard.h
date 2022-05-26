@@ -231,23 +231,15 @@ class SDCard {
          * @return success/failure of appending
          */
         boolean appendFile(const char * path, const char * content){
-            boolean res;
-            Serial.printf("Appending to file: %s\n", path);
-
             File file = SD.open(path, FILE_APPEND);
             if(!file){
-                Serial.println("Failed to open file for appending");
                 return false;
             }
-            if(file.print(content)){
-                Serial.println("Message appended");
-                res = true;
-            } else {
-                Serial.println("Append failed");
-                res = false;
+            if(!file.print(content)){
+                return false;
             }
             file.close();
-            return res;
+            return true;
         }
 
         /**
