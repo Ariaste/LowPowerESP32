@@ -3,7 +3,7 @@
 
 
 const int baudrate = 115200;
-ClimateSensor climate;
+ClimateSensor climate("SSID", "PASSWORD");
 
 
 void setup() {
@@ -17,7 +17,6 @@ void setup() {
 
   climate.setReferenceHeight(223);
   Serial.println("Climate Sensor is ready.\n");
-  Serial.println(" ");
 }
 
 void loop() { 

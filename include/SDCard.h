@@ -187,6 +187,16 @@ class SDCard {
         }
 
         /**
+         * @brief Checks if a file exists.
+         * 
+         * @param path file path
+         * @return boolean true if file exists else false
+         */
+        boolean exists(const char* path) {
+            return SD.open(path);
+        }
+
+        /**
          * @brief Writes to a file
          * 
          * @param path file path

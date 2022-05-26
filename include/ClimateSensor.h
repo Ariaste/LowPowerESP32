@@ -14,6 +14,10 @@ class ClimateSensor {
 
     public:
 
+        ClimateSensor(const char *ssid,  const char *password) {
+            logger = ClimateDataLogger(ssid, password);
+        }
+
         /**
          * Initialising both sensors.
          * @return bool if initialisation successful.
@@ -95,7 +99,7 @@ class ClimateSensor {
                 readTemperature(),
                 readHumidity(),
                 readPressure(),
-                readSeaLevelPressure(),
+                readSeaLevelPressure(readAltitude()),
                 readAltitude()
             );
         }
