@@ -33,27 +33,10 @@ class SDCard {
 
             String types[4] = {"MMC", "SDSC", "SDHC", "UNKNOWN"};
             Serial.printf(
-                "SD Card Type: %s\nSD Card Size: %llu MB\n", 
+                "\nSD Card Type: %s\nSD Card Size: %llu MB\n", 
                 types[cardType > 0 && cardType <= 3 ? cardType - 1 : 3],
                 SD.cardSize() / (1024 * 1024)
-            );
-            /*
-            Serial.print("SD Card Type: ");
-            if(cardType == CARD_MMC){
-                Serial.println("MMC");
-            } else if(cardType == CARD_SD){
-                Serial.println("SDSC");
-            } else if(cardType == CARD_SDHC){
-                Serial.println("SDHC");
-            } else {
-                Serial.println("UNKNOWN");
-            }
-            */
-
-            /*uint64_t cardSize = SD.cardSize() / (1024 * 1024);
-            Serial.printf("SD Card Size: %llu MB\n", cardSize);
-            */
-           
+            );           
             return true;
     } 
 
@@ -106,12 +89,7 @@ class SDCard {
          * @return success/failure of creation
          */
         boolean createDir(const char * path) {
-            if(SD.mkdir(path)){
-                return true;
-            } else {
-                Serial.printf("Creation of directory %s failed", path);
-                return false;
-        }
+            return SD.mkdir(path);
 }
 
         /**

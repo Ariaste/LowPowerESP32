@@ -3,7 +3,10 @@
 #include <time.h>
 
 
-
+/**
+ * @brief A class for creating timeStamps.
+ * 
+ */
 class ClimateTimeStamp {
 
     private:
@@ -15,6 +18,15 @@ class ClimateTimeStamp {
 
     public:
 
+        /**
+         * @brief Construct a new ClimateTimeStamp object
+         * 
+         * @param ssid SSID of your WiFi network
+         * @param password password of WiFi network
+         * @param ntpServer time server
+         * @param gmtOffset_sec time offset from GMT in seconds
+         * @param daylightOffset_sec daylightOffset, usually 3600
+         */
         ClimateTimeStamp(
             const char* ssid = "SSID", 
             const char* password = "PASSWORD", 
@@ -28,6 +40,10 @@ class ClimateTimeStamp {
                 _daylightOffset_sec = daylightOffset_sec;
         }
 
+        /**
+         * @brief Sets the real time clock;
+         * 
+         */
         void setRealTimeClock() {
             Serial.begin(115200);
             Serial.print("Setting Real Time Clock (RTC)");
@@ -42,6 +58,11 @@ class ClimateTimeStamp {
             WiFi.mode(WIFI_OFF);
         }
 
+        /**
+         * @brief Returns a time stamp as String
+         * 
+         * @return String time stamp
+         */
         String getTimeStamp() {
             struct tm timeInfo;
             if(!getLocalTime(&timeInfo)){
@@ -62,6 +83,11 @@ class ClimateTimeStamp {
             return timeString;
         }  
 
+        /**
+         * @brief Returns date stamp with under scores for creating log filenames
+         * 
+         * @return String 
+         */
         String fileDate() {
             struct tm timeInfo;
             if(!getLocalTime(&timeInfo)){
