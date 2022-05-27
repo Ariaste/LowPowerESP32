@@ -1,3 +1,14 @@
+/**
+ * @file Climate.h
+ * @author Patrick Fock (you@domain.com)
+ * @brief This library provides classes for measuring and logging climate data provided by the HTU21DF and the BMP085 or BMP180 sensors.
+ * @version 1.0
+ * @date 2022-05-27
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include <cmath>
 #include <Adafruit_HTU21DF.h>
 #include <Adafruit_BMP085.h>

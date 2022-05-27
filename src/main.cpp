@@ -47,6 +47,9 @@ void setup() {
 
 //unreachable in deep sleep mode
 void loop() { 
+  if(digitalRead(mode)) {
+    ESP.restart();
+  }
   Serial.printf(
     "\rTemperatur: %.2f °C, Feuchtigkeit: %.2f% %, Luftdruck: %.2f hPa, Luftdruck auf Meereshöhe: %.2f Höhe %.2f m", 
     climate.readTemperature(), 
