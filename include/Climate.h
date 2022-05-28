@@ -319,3 +319,23 @@ class ClimateSensor {
             );
         }
 };
+
+/**
+ * @brief A class providing a static method for initialising the real time clock.
+ * 
+ */
+class RTC {
+
+    public:
+
+        /**
+         * @brief Sets the real time clock via connecting to an ntp service over WiFi
+         * 
+         * @param ssid SSID of WiFi network
+         * @param password password of WiFi network
+         */
+        static void set(const char* ssid, const char* password) {
+            ClimateTimeStamp rtc(ssid, password);
+            rtc.setRealTimeClock();
+        }
+};
